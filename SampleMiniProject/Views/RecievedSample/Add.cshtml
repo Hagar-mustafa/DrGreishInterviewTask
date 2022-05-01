@@ -1,0 +1,117 @@
+﻿@model ReceivedSample
+@{
+    SelectList Clients;
+
+    if(Model !=null)
+    {
+        Clients=new SelectList(ViewBag.Clients,"Id","Name",@Model.ClientId);
+
+    }
+    else
+    {
+        Clients=new SelectList(ViewBag.Clients,"Id","Name");
+
+    }
+ }
+<form method="post" asp-action="Add"  asp-controller="RecievedSample" enctype="multipart/form-data" class="shadow p-3">
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="SampleName" class="col-form-label text-nowrap">اسم العينه</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="SampleName"  class=" form-control " />
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="SampleName"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="ClientId" class="col-form-label text-nowrap">أسم العميل</label>
+        </div>
+        <div class="col-10">
+            <select asp-for="ClientId " asp-items="Clients" class="form-control">
+            </select>
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="ClientId"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="Attach" class="col-form-label text-nowrap">المرفقات</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="Attach" class="form-control" multiple/>
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="Attach"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="ReceivingSide" class="col-form-label  text-nowrap">جهه الاستلام</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="ReceivingSide" class="form-control" />
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="ReceivingSide"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="Date" class="col-form-label  text-nowrap">تاريخ الاستلام</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="Date" class="form-control" />
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="Date"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="SampleDescription" class="col-form-label  text-nowrap">وصف العينه</label>
+        </div>
+        <div class="col-10">
+            <textarea  asp-for="SampleDescription" class="form-control " rows="3">
+                Enter text here...
+            </textarea>
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="SampleDescription"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="NumOfSamples" class=" col-form-label  text-nowrap">عدد العينات</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="NumOfSamples" class="form-control" min="1" />
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="NumOfSamples"></span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2 text-right">
+            <label asp-for="SampleStatus" class="col-form-label  text-nowrap">حاله العينه</label>
+        </div>
+        <div class="col-10">
+            <input asp-for="SampleStatus" class="form-control " />
+        </div>
+        <div class="col">
+            <span class="text-danger" asp-validation-for="SampleStatus"></span>
+        </div>
+    </div>
+    <div class="row pt-5 justify-content-center">
+        <div class="col-lg-2 text-right p-1 ">
+            <input type="submit" value="اضافه" class="form-control btn btn-dark font-weight-bold"/>     
+        </div>
+        <div class="col-lg-2 text-right p-1">
+            <a href="/RecievedSample/Index" class="form-control btn btn-info font-weight-bold text-decoration-none">الرجوع للقائمه</a>
+        </div>
+    </div>
+</form>
+            

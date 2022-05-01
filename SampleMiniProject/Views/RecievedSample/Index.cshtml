@@ -1,0 +1,116 @@
+﻿@model List<ReceivedSample>
+@section Style{
+<link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet"/>
+}
+<div class="row">
+    <div class="col-sm-12 mb-3 mt-3">
+        <div class="row">
+            <div class="col-4 text-center  text-sm-right">
+                <img src="/Images/message.gif" style="width:85px;"/>
+                <span class="font-weight-bolder text-nowrap ">العينات المستلمه</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 mb-3">
+        <form asp-action="Index" method="get">
+            <div class="form-actions row no-color">
+                <div class="col-3 mb-3">
+                    <input type="text" name="SearchTxt" value="@ViewBag.CurrentFilter" class="form-control" id="txtSearch" placeholder="بحث"/>
+                </div>
+                <div class="col-5 mb-3">
+                    <div class="row">
+                        <span class="text-left col">اظهر</span>
+                        <input type="number" min="0" max="20" name="SampleNumber" value="@ViewBag.SampleNumber" class="form-control col"/>
+                        <span class="text-right col">مدخلات</span>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <input type="submit" value="بحث" class="shadow border-0 w-100" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table-responsive shadow alert-light">
+        <table id="dtBasicExample" class="table table-bordered align-middle align-self-stretch table-striped table-hover  p-2" cellspacing="0" width="100%">           
+            <thead >
+                <tr>
+                    <th  class="text-center text-nowrap" scope="col" >أسم العينه</th>
+                    <th  class="text-center text-nowrap" scope="col" >أسم العميل</th>
+                    <th  class="text-center text-nowrap" scope="col" >جهه الاستلام </th>
+                    <th  class="text-center text-nowrap" scope="col" >تاريخ الاستلام</th>
+                    <th  class="text-center text-nowrap" scope="col" >مرفقات العميل</th>
+                    <th  class="text-center text-nowrap " scope="col" >وصف العينه</th>
+                    <th  class="text-center text-nowrap" scope="col" >عدد العينات</th>
+                    <th  class="text-center text-nowrap" scope="col" >حاله العينه </th>
+                    <th class="text-center text-nowrap" scope="col" > تعديل/حذف</th>           
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td class="text-right text-nowrap" >@item.SampleName</td>               
+                        <td class="text-right text-nowrap" >@item.Client.Name</td>
+                        <td class="text-right text-nowrap" >@item.ReceivingSide</td>
+                        <td class="text-right text-nowrap" >@item.Date</td>
+                        <td class="text-right text-nowrap" >
+                            @foreach(var file in ViewBag.Attachments)
+                            {
+                                if (file.ReceivedSampleID == item.ID)
+                                {       
+                                    <div>@Html.ActionLink($"{file.FileName}","DownloadFile",new {fileName=file.FileName})</div>    
+                                }
+                            }
+                        </td>
+                        <td class="text-right text-nowrap" >@item.SampleDescription</td>
+                        <td class="text-right" >@item.NumOfSamples</td>
+                        <td class="text-right text-nowrap" >@item.SampleStatus</td>
+                        <td class="text-center text-nowrap">
+                            <div>
+                                <a href="/RecievedSample/Edit/@item.ID" class="btn-link d-inline">تعديل </a>|
+                                <form asp-action="Delete" asp-route-id="@item.ID" class="d-inline form-row">
+                                    <input type="submit" value="حذف" class="btn-link border-0 delete-item" />
+                                </form>
+                            </div>
+                        </td>
+                    </tr>   
+                }
+            </tbody>
+        </table>
+    </div>          
+    <div class="col-12 m-3 justify-content-center ">
+        <button type="button" class="btn btn-info col-3 shadow">
+            <a class="text-decoration-none text-white font-weight-bold" href="\RecievedSample\Add">
+            انشاء جديد
+            </a>
+        </button> 
+    </div>
+</div>
+@section Scripts{
+    @*-----------------------------------------------------------------------------*@
+    @*JavaScript Libraries to enable Paginations*@
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+   @* --------------------------------------------------------------------------*@
+    <script>
+        //------------------------------------------------------------------
+        //alert message to confirm delete
+        const allDeleteBtns = document.querySelectorAll(".delete-item");
+
+        allDeleteBtns.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                let confirmResult = confirm("Are You Want To Delete That?");
+                if (!confirmResult)
+                    e.preventDefault();
+            });
+        })
+        //------------------------------------------------------------------
+        //Script used to set Table attributes
+        $(document).ready(function() {
+            $('#dtBasicExample').DataTable( {
+                "paging": "simple",
+                "searching": false
+            } );
+        } );
+    </script>
+}
